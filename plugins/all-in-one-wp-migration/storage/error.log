@@ -1,0 +1,3 @@
+Oct 02 2017 12:48:33
+{"type":8192,"message":"Methods with the same name as their class will not be constructors in a future version of PHP; WP_Import has a deprecated constructor","file":"\/var\/www\/html\/wp-content\/plugins\/wordpress-importer\/wordpress-importer.php","line":38}
+
