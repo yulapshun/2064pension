@@ -1,9 +1,14 @@
+/* custom */
+.CodeMirror span.bws-readonly {
+  color: #aaa;
+}
 /* BASICS */
 
 .CodeMirror {
   /* Set height, width, borders, and global font properties here */
   font-family: monospace;
   height: 500px;
+  border: 1px solid #ddd;
 }
 .CodeMirror-scroll {
   /* Set scrolling behaviour here */

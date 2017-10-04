@@ -1,6 +1,6 @@
 <?php 
 
-/*############  Comments Admin Menu Class ################*/
+    /*############  Admin Menu Class ################*/
 
 class wpdevart_comment_admin_menu{
 	
@@ -9,6 +9,8 @@ class wpdevart_comment_admin_menu{
 	private $plugin_url;
 	private $text_parametrs;
 
+	/*###################### Constract params function ##################*/	
+	
 	function __construct($param){
 		
 		$this->menu_name=$param['menu_name'];
@@ -21,6 +23,8 @@ class wpdevart_comment_admin_menu{
 			add_action( 'add_meta_boxes', array($this,'wpdevart_comment_add_meta_box') );
 			add_action( 'save_post', array($this,'wpdevar_save_post') );
 	}
+
+	/*###################### Meta Box function ##################*/	
 	
 	public function wpdevart_comment_add_meta_box() {
 
@@ -31,13 +35,16 @@ class wpdevart_comment_admin_menu{
 			add_meta_box('myplugin_sectionid',	'Disable Wpdevart facebook comment',array($this,'generete_html_for_wpdevart_comment_box'),	$post_type	);
 		}
 	}
+	
+    /*############  HTML generating function  ################*/
+	
 	public function generete_html_for_wpdevart_comment_box($post){
-		// Add a nonce field so we can check for it later.
+		// Add field that we can check later.
 		wp_nonce_field( 'wpdevar_save_post', 'wpdevart_facebook_meta_box_nonce' );
 	
 		/*
-		 * Use get_post_meta() to retrieve an existing value
-		 * From database and use the value for the form.
+		 * Use get_post_meta() to retrieve the existing value
+		 * From database, use the value for the form.
 		 */
 		$value = get_post_meta( $post->ID, '_disabel_wpdevart_facebook_comment', true );
 		echo '<label for="wpdevart_disable_field">';
@@ -45,6 +52,9 @@ class wpdevart_comment_admin_menu{
 		echo '</label> ';
 		echo '<select id="wpdevart_disable_field" name="wpdevart_disable_field"><option value="enable">Enable</option><option '.(($value=='disable')?'selected="selected"':'').' value="disable">Disable</option></select>';
 	}
+	
+	/*###################### Post save function ##################*/	
+	
 	function wpdevar_save_post( $post_id ) {
 
 		
@@ -74,9 +84,8 @@ class wpdevart_comment_admin_menu{
 		update_post_meta( $post_id, '_disabel_wpdevart_facebook_comment', $my_data );
 	}
 
-	/*############################ Posts/Pages insert button (shortcode)###################################*/
+	/*############################ Posts/Pages insert button shortcode part ###################################*/
 
-	
 	public function create_menu(){
 		$main_page 	 	  = add_menu_page( $this->menu_name, $this->menu_name, 'manage_options', str_replace( ' ', '-', $this->menu_name), array($this, 'main_menu_function'),$this->plugin_url.'images/facebook_menu_icon.png');
 		$page_wpdevart_comment	  =	add_submenu_page($this->menu_name,  $this->menu_name,  $this->menu_name, 'manage_options', str_replace( ' ', '-', $this->menu_name), array($this, 'main_menu_function'));
@@ -84,6 +93,8 @@ class wpdevart_comment_admin_menu{
 		add_action('admin_print_styles-' .$main_page, array($this,'menu_requeried_scripts'));
 		add_action('admin_print_styles-' .$page_wpdevart_comment, array($this,'menu_requeried_scripts'));		
 	}
+
+	/*###################### Requaried scripts function ##################*/	
 	
 	public function menu_requeried_scripts(){
 		wp_enqueue_script('wp-color-picker');		
@@ -91,6 +102,8 @@ class wpdevart_comment_admin_menu{
 		wp_enqueue_script( 'comment-box-admin-script' ); 
 		wp_enqueue_style('comment-box-admin-style');
 	}
+	
+	/*###################### Generate parameters function ##################*/		
 	
 	private function generete_parametrs($page_name){
 		$page_parametrs=array();
@@ -103,6 +116,8 @@ class wpdevart_comment_admin_menu{
 		return NULL;
 		
 	}
+	
+	/*###################### Database function ##################*/	
 	
 	public function save_in_databese(){
 		$kk=1;	
@@ -125,6 +140,8 @@ class wpdevart_comment_admin_menu{
 		die($this->text_parametrs['parametrs_sucsses_saved']);
 	}
 	
+	/*###################### Main menu function ##################*/		
+	
 	public function main_menu_function(){	
 	
 	$enable_disable=$this->generete_parametrs('general_save_parametr');	
@@ -136,7 +153,7 @@ class wpdevart_comment_admin_menu{
 		var wpdevart_comment_parametrs_sucsses_saved="<?php echo $this->text_parametrs['parametrs_sucsses_saved'] ?>";
 		var wpdevart_comment_all_parametrs = <?php echo json_encode($this->databese_parametrs); ?>;
         </script>
-      <div class="coming_title"><h1>Facebook Comments <a style="text-decoration:none;" href="http://wpdevart.com/wordpress-facebook-comments-plugin/"><span style="color: rgba(10, 154, 62, 1);"> (Upgrade to Pro Version)</span></a></h1></div>      
+      <div class="coming_title"><h1>Facebook Comments <a style="text-decoration:none;" href="http://wpdevart.com/wordpress-facebook-comments-plugin/"><span style="color: rgba(10, 154, 62, 1);"> (Upgrade to Pro Version)</span></a><a target="blank" href="<?php echo wpdevart_comment_support_url; ?>" class="wp_support">Support</a></h1></div>      
       
 	<br>
      
@@ -151,7 +168,7 @@ class wpdevart_comment_admin_menu{
             <div class="right_sections">
                 <div class="main_parametrs_group_div">
                     <div class="head_panel_div">                    
-                    	<span class="title_parametrs_group">User manual for Facebook Comments plugin</span>       
+                    	<span class="title_parametrs_group">Facebook Comments plugin user manual</span>       
                     </div>
                     <div class="inside_information_div">
                         <table class="wp-list-table widefat fixed posts section_parametrs_table">                            
@@ -160,32 +177,32 @@ class wpdevart_comment_admin_menu{
                                     <td>
                                         <div class="pea_admin_box">
                                         
-                                            <p>This is a short user manual that will help you to insert Facebook Comments into your website.</p>
+                                            <p>Here's the short user manual that should help you to insert Facebook Comments Box into your website.</p>
                                            <p style="font-weight:bolder"><span style="color:red">APP ID</span> - you can create your App Id on this page - <a style="color:#0073aa" target="_blank" href="https://developers.facebook.com/apps">https://developers.facebook.com/apps.</a>
-Also, here is another tutorial of creating App Id, you can check it - <a style="color:#0073aa" target="_blank" href="https://help.yahoo.com/kb/SLN18861.html">https://help.yahoo.com/kb/SLN18861.html</a>.</p>
-                                            <p>If you select the option "Display comment on"  Home, Post, Page  then Facebook Comments box will be added on every page of your website. </p> 
-                                            <p>Also, you can insert the Facebook Comments box manually in any page, post or even in Php code by using the shortcode.</p>
+Also, here is another tutorial(from other source) of creating App Id, you can check it - <a style="color:#0073aa" target="_blank" href="https://help.yahoo.com/kb/SLN18861.html">https://help.yahoo.com/kb/SLN18861.html</a>.</p>
+                                            <p>If you select the option "Display comments on" - Home, Post, Page, then the Facebook Comments box will be added on every page/post of your website. </p> 
+                                            <p>Also, you can insert the Facebook Comments box manually in any page/post or even in Php code using plugin shortcode. You can disable comments on single pages or posts as well by disabling it(find the otion below posts/pages).</p>
                                             
-                                            <p><strong>Here's an example of using the comments shortcode in posts, pages:</strong></p>
-                                            <p><code>[wpdevart_facebook_comment curent_url="http://developers.facebook.com/docs/plugins/comments/" title_text="Facebook Comment" order_type="social" title_text_color="#000000" title_text_font_size="22" title_text_font_famely="monospace" title_text_position="left" width="100%" bg_color="#CCCCCC" animation_effect="random"  count_of_comments="2" ]</code></p>
+                                            <p><strong>Here's an example of using the Facebook comments shortcode in posts, pages:</strong></p>
+                                            <p><code>[wpdevart_facebook_comment curent_url="http://developers.facebook.com/docs/plugins/comments/" title_text="Facebook Comment" order_type="social" title_text_color="#000000" title_text_font_size="22" title_text_font_famely="monospace" title_text_position="left" width="100%" bg_color="#d4d4d4" animation_effect="random"  count_of_comments="2" ]</code></p>
                                             
-                                            <p><strong>Here's an example of using the shortcode in PHP code:</strong></p>
-                                            <p><code>&lt;?php echo do_shortcode('[wpdevart_facebook_comment curent_url="http://developers.facebook.com/docs/plugins/comments/" order_type="social" title_text="Facebook Comment" title_text_color="#000000" title_text_font_size="22" title_text_font_famely="monospace" title_text_position="left" width="100%" bg_color="#CCCCCC" animation_effect="random"  count_of_comments="2" ]'); ?&gt;</code></p>
+                                            <p><strong>Here is an example of using the Facebook comments box shortcode in PHP code:</strong></p>
+                                            <p><code>&lt;?php echo do_shortcode('[wpdevart_facebook_comment curent_url="http://developers.facebook.com/docs/plugins/comments/" order_type="social" title_text="Facebook Comment" title_text_color="#000000" title_text_font_size="22" title_text_font_famely="monospace" title_text_position="left" width="100%" bg_color="#d4d4d4" animation_effect="random"  count_of_comments="3" ]'); ?&gt;</code></p>
                                             
                                             <p><strong>Here are explanation of Facebook comments shortcode attributes.</strong></p>
                                             
-                                            <p><strong>curent_url</strong> - Type the URL of a page from where you need to show Facebook comments </p>
-                                            <p><strong>title_text</strong> - Type here Facebook comments box title</p>
-                                            <p><strong>colorscheme</strong> <span class="pro_feature"> (pro)</span> - Select Facebook comments box color scheme.Can be "light" or "dark".</p>
-                                            <p><strong>order_type</strong> - Select Facebook comments box order type.The order to use when displaying comments. Can be "social", "reverse_time", or "time". </p>
-                                            <p><strong>title_text_color</strong> - Select Facebook comments box title text color</p>
-                                            <p><strong>title_text_font_size</strong> - Type Facebook comments box title font-size</p>
-                                            <p><strong>title_text_font_famely</strong> - Select Facebook comments box title font family</p>
-                                            <p><strong>title_text_position</strong> - Select Facebook comments box title position</p>
-                                            <p><strong>width</strong> - Type here the Facebook comments box width</p>
-                                            <p><strong>count_of_comments</strong> - Type here the comments of Facebook comments to display</p>
-                                            <p><strong>bg_color</strong> <span class="pro_feature"> (pro)</span> - Select Facebook comments background color</p>
-                                            <p><strong>animation_effect</strong> <span class="pro_feature"> (pro)</span> - Select the animation effect for Facebook comments box</p>
+                                            <p><strong>Curent_url</strong> - Type the page URL from where you need to show Facebook comments </p>
+                                            <p><strong>Title_text</strong> - Type here Facebook comments box title</p>
+                                            <p><strong>Colorscheme</strong> <span class="pro_feature"> (pro)</span> - Select Facebook comments box color scheme.Can be "light" or "dark".</p>
+                                            <p><strong>Order_type</strong> - Choose Facebook comments box order type.The order to use when displaying comments. Can be "social", "reverse_time", or "time". </p>
+                                            <p><strong>Title_text_color</strong> - Select Facebook comments box title text color</p>
+                                            <p><strong>Title_text_font_size</strong> - Type Facebook comments box title font-size(px)</p>
+                                            <p><strong>Title_text_font_famely</strong> - Select Facebook comments box title font family</p>
+                                            <p><strong>Title_text_position</strong> - Select Facebook comments box title position</p>
+                                            <p><strong>Width</strong> - Type here the Facebook comments box width(px)</p>
+                                            <p><strong>Count_of_comments</strong> - Type here the number of Facebook comments you need to display</p>
+                                            <p><strong>Bg_color</strong> <span class="pro_feature"> (pro)</span> - Select Facebook comments background color</p>
+                                            <p><strong>Animation_effect</strong> <span class="pro_feature"> (pro)</span> - Select the animation effect for Facebook comments box</p>
 
                                         </div>
                                     </td>
@@ -201,13 +218,14 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
 	}
 	
 	
-	/*#########################  Facebook Comments box Main settings   #################################*/
+	/*#########################  Facebook Comments Box main settings #################################*/
+	
 	public function generete_wpdevart_main_section($page_parametrs){
 
 		?>
 		<div class="main_parametrs_group_div " >
 			<div class="head_panel_div">
-				<span class="title_parametrs_group">comment box settings</span>
+				<span class="title_parametrs_group">Comment box settings</span>
 				<span class="enabled_or_disabled_parametr"></span>
 				<span class="open_or_closed"></span>         
 			</div>
@@ -218,7 +236,7 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
                 
                  	<tr>
 						<td>
-							APP ID <span style="color:red">important</span>  <span title="Type here your Facebook App ID" class="desription_class">?</span>
+							APP ID <span style="color:red">Important</span>  <span title="Type here your Facebook App ID" class="desription_class">?</span>
 						</td>
 						<td>
 							<input type="text" name="wpdevart_comment_facebook_app_id"   id="wpdevart_comment_facebook_app_id" value="<?php echo $page_parametrs['wpdevart_comment_facebook_app_id'] ?>">
@@ -234,7 +252,7 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
 					</tr>
                     <tr >
                         <td>
-                           Color scheme <span class="pro_feature"> (pro)</span> <span title="Select Facebook comments box color scheme" class="desription_class">?</span>
+                           Color scheme <span class="pro_feature"> (pro)</span> <span title="Select Comments box color scheme" class="desription_class">?</span>
                         </td>
                         <td>
  							<select class="pro_select" id="wpdevart_comments_box_color_scheme">
@@ -245,7 +263,7 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
                     </tr>
                      <tr >
                         <td>
-                           Order Type <span title="Select Facebook comments box order type." class="desription_class">?</span>
+                           Order Type <span title="Choose comments order type" class="desription_class">?</span>
                         </td>
                         <td>
  							<select id="wpdevart_comments_box_order_type">
@@ -265,7 +283,7 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
                     </tr>
                     <tr>
 						<td>
-							Title font-size <span title="Type Facebook comments box title font-size" class="desription_class">?</span>
+							Title font-size <span title="Type Facebook comments box title font-size(px)" class="desription_class">?</span>
 						</td>
 						<td>
 							<input type="text" name="wpdevart_comment_title_text_font_size" id="wpdevart_comment_title_text_font_size" value="<?php echo $page_parametrs['wpdevart_comment_title_text_font_size'] ?>">Px
@@ -273,7 +291,7 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
 					</tr>
                     <tr>
 						<td>
-							Title font family <span title=" Select Facebook comments box title font family" class="desription_class">?</span>
+							Title font family <span title=" Select Facebook comments title font family" class="desription_class">?</span>
 						</td>
 						<td>
 							<?php $this->create_select_element_for_font('wpdevart_comment_title_text_font_famely',$page_parametrs['wpdevart_comment_title_text_font_famely']) ?>
@@ -281,7 +299,7 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
 					</tr>
                     <tr >
                         <td>
-                           Title position <span title="Select Facebook comments box title position" class="desription_class">?</span>
+                           Title position <span title="Select Facebook comments title position" class="desription_class">?</span>
                         </td>
                         <td>
                             <select id="wpdevart_comment_title_text_position">
@@ -293,7 +311,7 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
                     </tr>
                 	<tr>
 						<td>
-							Display comment on<span title="Select where to display Facebook comments" class="desription_class">?</span>
+							Display comments on<span title="Select where to display Facebook comments" class="desription_class">?</span>
 						</td>
 						<td>
                         <?php $jsone_wpdevart_comments_box_show_in= json_decode(stripslashes($page_parametrs['wpdevart_comments_box_show_in']), true);?>  
@@ -318,7 +336,7 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
                     
                     <tr>
 						<td>
-							Comment box width <span title="Type here the Facebook comments box width" class="desription_class">?</span>
+							Comments box width <span title="Type here the Facebook comments box width(px)" class="desription_class">?</span>
 						</td>
 						<td>
 							<input type="text" name="wpdevart_comments_box_width" id="wpdevart_comments_box_width" value="<?php echo $page_parametrs['wpdevart_comments_box_width'] ?>">
@@ -326,7 +344,7 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
 					</tr>
                      <tr>
 						<td>
-							Number of comments <span title="Type here the comments of Facebook comments to display " class="desription_class">?</span>
+							Number of comments <span title="Type here the number of Facebook comments to show" class="desription_class">?</span>
 						</td>
 						<td>
 							<input type="text" name="wpdevart_comments_box_count_of_comments" id="wpdevart_comments_box_count_of_comments" value="<?php echo $page_parametrs['wpdevart_comments_box_count_of_comments'] ?>">
@@ -353,7 +371,7 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
                 
                      <tr>
 						<td>
-							Default language <span title="Type here Facebook comments language code(en_US,de_DE...)" class="desription_class">?</span>
+							Default language <span title="Type here Facebook comments default language code(en_US,de_DE...)" class="desription_class">?</span>
 						</td>
 						<td>
 							<input type="text" name="wpdevart_comments_box_locale"   id="wpdevart_comments_box_locale" value="<?php echo $page_parametrs['wpdevart_comments_box_locale'] ?>">(en_US,de_DE...)
@@ -372,14 +390,28 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
 		<?php	
 	}
 	
+	/*###################### Featured plugin function ##################*/	
+	
 	public function featured_plugins(){
 		$plugins_array=array(
+			'gallery_album'=>array(
+						'image_url'		=>	$this->plugin_url.'images/featured_plugins/gallery-album-icon.png',
+						'site_url'		=>	'http://wpdevart.com/wordpress-gallery-plugin',
+						'title'			=>	'WordPress Gallery plugin',
+						'description'	=>	'Gallery plugin is an useful tool that will help you to create Galleries and Albums. Try our nice Gallery views and awesome animations.'
+						),		
 			'coming_soon'=>array(
 						'image_url'		=>	$this->plugin_url.'images/featured_plugins/coming_soon.jpg',
 						'site_url'		=>	'http://wpdevart.com/wordpress-coming-soon-plugin/',
 						'title'			=>	'Coming soon and Maintenance mode',
 						'description'	=>	'Coming soon and Maintenance mode plugin is an awesome tool to show your visitors that you are working on your website to make it better.'
 						),
+			'Contact forms'=>array(
+						'image_url'		=>	$this->plugin_url.'images/featured_plugins/contact_forms.png',
+						'site_url'		=>	'http://wpdevart.com/wordpress-contact-form-plugin/',
+						'title'			=>	'Contact Form Builder',
+						'description'	=>	'Contact Form Builder plugin is an handy tool for creating different types of contact forms on your WordPress websites.'
+						),	
 			'Booking Calendar'=>array(
 						'image_url'		=>	$this->plugin_url.'images/featured_plugins/Booking_calendar_featured.png',
 						'site_url'		=>	'http://wpdevart.com/wordpress-booking-calendar-plugin/',
@@ -421,7 +453,13 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
 						'site_url'		=>	'http://wpdevart.com/wordpress-facebook-comments-plugin/',
 						'title'			=>	'WordPress Facebook comments',
 						'description'	=>	'Our Facebook comments plugin will help you to display Facebook Comments on your website. You can use Facebook Comments on your pages/posts.'
-						),							
+						),
+			'scroll'=>array(
+						'image_url'		=>	$this->plugin_url.'images/featured_plugins/Scroll.png',
+						'site_url'		=>	'https://wordpress.org/plugins/wp-scroll-2',
+						'title'			=>	'Scroll To Top',
+						'description'	=>	'Scroll to top plugin is an simple and nice plugin with the standard scroll settings. You can use it on your website different sides.'
+						),						
 			
 		);
 		?>
@@ -498,7 +536,8 @@ Also, here is another tutorial of creating App Id, you can check it - <a style="
             </div>
             <?php } 
 	}
-	/*######################################### SUBSCRIBE #######################################*/
+	
+	/*######################################### Fonts Function #######################################*/
 
 	private function create_select_element_for_font($select_id='',$curent_font='none'){
 	?>

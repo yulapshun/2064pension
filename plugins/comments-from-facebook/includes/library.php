@@ -4,7 +4,7 @@ class wpdevart_comment_setting{
 	public static $list_of_animations=array('bounce','flash','pulse','rubberBand','shake','swing','tada','wobble','bounceIn','bounceInDown','bounceInLeft','bounceInRight','bounceInUp','fadeIn','fadeInDown','fadeInDownBig','fadeInLeft','fadeInLeftBig','fadeInRight','fadeInRightBig','fadeInUp','fadeInUpBig','flip','flipInX','flipInY','lightSpeedIn','rotateIn','rotateInDownLeft','rotateInDownRight','rotateInUpLeft','rotateInUpRight','rollIn','zoomIn','zoomInDown','zoomInLeft','zoomInRight','zoomInUp');
 	public static $id_for_iframe=0;
 	
-	// Function for animations
+	// Function for Animations
 	public static function get_animations_type_array($animation=''){
 		if($animation=='' || $animation=='none')
 			return '';
@@ -26,11 +26,11 @@ class wpdevart_comment_setting{
 			"curent_url"						=> get_permalink(),			
 			"title_text"						=> 'Comments',
 			"title_text_color"					=> '#000000',
-			"title_text_font_size"				=> '22',
-			"title_text_font_famely"			=> 'Times New Roman,Times,Georgia,serif',
+			"title_text_font_size"				=> '15',
+			"title_text_font_famely"			=> 'Times New Roman,Times,Serif,Georgia',
 			"title_text_position"				=> 'left',
 			"width"								=>  '100%',
-			"count_of_comments"					=>  '5',
+			"count_of_comments"					=>  '10',
 			"locale"							=>  'en_US',	
 				
 		);
@@ -50,6 +50,7 @@ $output_code.='<div id="'.$params['iframe_id'].'" style="width:'.( (strpos($para
 		<div class="fb-comments" data-href="'.$params['curent_url'].'" data-order-by="'.$params['order_type'].'" data-numposts="'.$params['count_of_comments'].'" data-width="'.$params['width'].'" style="display:block;"></div></div>';
 		return $output_code;
 	}
+	// Animation effects list
 	public static function generete_animation_select($select_id='',$curent_effect='none'){
 	?>
     <select class="pro_select" id="<?php echo $select_id; ?>" name="<?php echo $select_id; ?>">

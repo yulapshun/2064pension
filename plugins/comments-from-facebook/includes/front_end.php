@@ -1,5 +1,7 @@
 <?php 
 
+	/*###################### Facebook comments front-end ##################*/	
+	
 class wpdevart_comment_front_end{
 	private $menu_name;
 	
@@ -11,6 +13,8 @@ class wpdevart_comment_front_end{
 	
 	public static $id_for_content=0;
 
+	/*###################### Constract params function ##################*/		
+	
 	function __construct($params){
 		
 		$this->databese_parametrs=$params['databese_parametrs'];
@@ -19,19 +23,21 @@ class wpdevart_comment_front_end{
 			$this->plugin_url=$params['plugin_url'];
 		else
 			$this->plugin_url=trailingslashit(dirname(plugins_url('',__FILE__)));
-		//Genereting js code for inserting into footer			
+		//Generating js code for footer.php			
 		add_action( 'wp_head',array($this,'generete_front_javascript'));
 		add_action( 'wp_footer',array($this,'generete_facbook_js_sdk'));
-		// Genereting code for content
+		// Generating content code 
 		add_shortcode( 'wpdevart_facebook_comment', array($this,'wpdevart_comment_shortcode') );
 		add_action('the_content',array($this,'insert_facebook_comment_in_content'));
 		$this->params=$this->generete_params();
-		// Part of code for updated parameters
+		// Updated parameters
 		
 		
 		
 	}
-	/*###################### FUNCTION FOR CONNECTING TO DATABESE ##################*/
+	
+	/*###################### FUNCTION FOR CONNECTING TO THE DATABASE ##################*/
+	
 	private function generete_params(){
 		
 		foreach($this->databese_parametrs as $param_array_key => $param_value){
@@ -42,6 +48,9 @@ class wpdevart_comment_front_end{
 		return $front_end_parametrs;
 		
 	}
+	
+	/*###################### Insert comments in content function ##################*/	
+	
 	public function insert_facebook_comment_in_content($content){
 			$jsone_comment_show_in= json_decode(stripslashes($this->params['wpdevart_comments_box_show_in']), true);
 			global $post;
@@ -68,13 +77,18 @@ class wpdevart_comment_front_end{
 		
 		
 	}
-	/*###################### Scripts and styles ##################*/
+	
+	/*###################### Scripts and Styles function ##################*/
+	
 	public function generete_front_javascript(){
 			wp_enqueue_script('thickbox');
 			wp_enqueue_style('thickbox');
 			echo '<meta property="fb:app_id" content="'.$this->params['wpdevart_comment_facebook_app_id'].'"/>';
 		
 	}
+	
+	/*###################### Shortcode function ##################*/	
+	
 	public function wpdevart_comment_shortcode($atts){
 		$atts = shortcode_atts( array(
 			"facebook_app_id"					=> $this->params['wpdevart_comment_facebook_app_id'],
@@ -91,6 +105,9 @@ class wpdevart_comment_front_end{
 		), $atts, 'wpdevart_facebook_comment' );
 		return  wpdevart_comment_setting::generete_iframe_by_array($atts);
 	}
+
+    /*############  Generate Facebook Js function  ################*/	
+	
 	public function generete_facbook_js_sdk(){
 		?>
         <div id="fb-root"></div>
@@ -103,7 +120,7 @@ class wpdevart_comment_front_end{
         }(document, 'script', 'facebook-jssdk'));</script>	
     <?php
 	}
-	/*Creating iframe for content*/
+	/*Function for creating content iframe*/
 
 }
 ?>

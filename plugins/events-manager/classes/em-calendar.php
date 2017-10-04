@@ -358,12 +358,12 @@ class EM_Calendar extends EM_Object {
 	public static function translate_and_trim($string, $length = 1) {
 	    if( $length > 0 ){
 			if(function_exists('mb_substr')){ //fix for diacritic calendar names
-			    return mb_substr(__($string,'events-manager'), 0, $length, 'UTF-8');
+			    return mb_substr(translate($string), 0, $length, 'UTF-8');
 			}else{ 
-	    		return substr(__($string,'events-manager'), 0, $length); 
+	    		return substr(translate($string), 0, $length); 
 	    	}
 	    }
-	    return __($string,'events-manager');
+	    return translate($string);
 	}  
 	
 	/**
@@ -393,6 +393,15 @@ class EM_Calendar extends EM_Object {
     				unset($args[$arg_key]);	
     		    }
 			}
+		}
+		//clean up post type conflicts in a URL
+		if( !empty($args['event']) ){
+			$args['event_id'] = $args['event'];
+			unset($args['event']);
+		}
+		if( !empty($args['location']) ){
+			$args['location_id'] = $args['location'];
+			unset($args['location']);
 		}
 		return $args;
 	}
@@ -437,7 +446,8 @@ class EM_Calendar extends EM_Object {
 			'orderby' => get_option('dbem_display_calendar_orderby'),
 			'order' => get_option('dbem_display_calendar_order'),
 			'number_of_weeks' => false, //number of weeks to be displayed in the calendar
-		    'limit' => get_option('dbem_display_calendar_events_limit')
+		    'limit' => get_option('dbem_display_calendar_events_limit'),
+			'post_id' => false
 		);
 		//sort out whether defaults were supplied or just the array of search values
 		if( empty($array) ){

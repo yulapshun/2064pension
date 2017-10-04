@@ -2,8 +2,9 @@
 /**
  * Plugin Name: Wpdevart Facebook comments
  * Plugin URI: http://wpdevart.com/wordpress-facebook-comments-plugin/
- * Description: Our WordPress Facebook comments plugin will help you to display Facebook Comments box on your website. You can use Facebook Comments box on your pages/posts.
- * Version: 1.2.5
+ * Author URI: http://wpdevart.com
+ * Description: Facebook comments plugin will help you to display Facebook Comments box on your website. You can use Facebook Comments on your pages/posts.
+ * Version: 1.8.1
  * Author: wpdevart
  * License: GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
@@ -20,11 +21,14 @@ class wpdevart_comment_main{
 	
 	public $wpdevart_comment_options;
 	
+    /*############  Construct function  ################*/
 	
 	function __construct(){
 		
 		$this->wpdevart_comment_plugin_url  = trailingslashit( plugins_url('', __FILE__ ) );
 		$this->wpdevart_comment_plugin_path = trailingslashit( plugin_dir_path( __FILE__ ) );
+		//
+		define("wpdevart_comment_support_url","https://wordpress.org/support/plugin/comments-from-facebook");
 		if(!class_exists('wpdevart_comment_setting'))
 			require_once($this->wpdevart_comment_plugin_path.'includes/library.php');
 		$this->wpdevart_comment_version     = 10.0;
@@ -34,6 +38,8 @@ class wpdevart_comment_main{
 		$this->wpdevart_comment_front_end();
 		
 	}
+
+	/*###################### Create admin menu function ##################*/	
 	
 	public function create_admin_menu(){
 		
@@ -44,6 +50,8 @@ class wpdevart_comment_main{
 		add_action('admin_menu', array($wpdevart_comment_admin_menu,'create_menu'));
 		
 	}
+
+	/*###################### Install database function ##################*/	
 	
 	public function install_databese(){
 		
@@ -55,12 +63,16 @@ class wpdevart_comment_main{
 		
 	}
 	
+	/*###################### Front end function ##################*/	
+	
 	public function wpdevart_comment_front_end(){
 		
 		require_once($this->wpdevart_comment_plugin_path.'includes/front_end.php');
 		$wpdevart_comment_front_end = new wpdevart_comment_front_end(array('menu_name' => 'Wpdevart Comment','databese_parametrs'=>$this->wpdevart_comment_options));
 		
 	}
+
+    /*############  Register Requeried Scripts function  ################*/
 	
 	public function registr_requeried_scripts(){
 		wp_register_script('comment-box-admin-script',$this->wpdevart_comment_plugin_url.'includes/javascript/admin-wpdevart-comment.js');
@@ -68,10 +80,30 @@ class wpdevart_comment_main{
 		
 	}
 	
+	/*###################### Call base filters function ##################*/
+	
 	public function call_base_filters(){
 		add_action( 'init',  array($this,'registr_requeried_scripts') );
 		add_action( 'admin_head',  array($this,'include_requeried_scripts') );
+		//for_upgrade
+		add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array($this,'plugin_activate_sublink') );
+		
 	}
+	
+    /*############  Activate Sublink function  ################*/	
+	
+	public function plugin_activate_sublink($links){
+		$plugin_submenu_added_link=array();		
+		 $added_link = array(
+		 '<a target="_blank" style="color: rgba(10, 154, 62, 1); font-weight: bold; font-size: 13px;" href="http://wpdevart.com/wordpress-facebook-comments-plugin">Upgrade to Pro</a>',
+		 );
+		$plugin_submenu_added_link=array_merge( $plugin_submenu_added_link, $added_link );
+		$plugin_submenu_added_link=array_merge( $plugin_submenu_added_link, $links );
+		return $plugin_submenu_added_link;
+	}
+	
+    /*############  Include requeried scripts function  ################*/	
+	
   	public function include_requeried_scripts(){
 		wp_enqueue_script('wp-color-picker');
 		wp_enqueue_style( 'wp-color-picker' );
