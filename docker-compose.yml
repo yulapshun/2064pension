@@ -5,7 +5,6 @@ services:
     image: wordpress:4.8.2-php7.1-fpm
     expose:
       - "9000"
-    restart: always
     ports:
       - "3306:3306"
     volumes:
@@ -17,12 +16,12 @@ services:
       options:
         max-size: "20M"
         max-file: "10"
+    mem_limit: ${DOCKER_WORDPRESS_MEM}
 
   nginx:
     image: nginx:1.13
-    restart: always
     ports:
-      - "8008:80"
+      - "80:80"
     links:
       - wordpress
     volumes:
@@ -34,6 +33,7 @@ services:
       options:
         max-size: "20M"
         max-file: "10"
+    mem_limit: ${DOCKER_NGINX_MEM}
 
   db:
     image: mysql:5.7
@@ -46,3 +46,4 @@ services:
       options:
         max-size: "20M"
         max-file: "10"
+    mem_limit: ${DOCKER_DB_MEM}
