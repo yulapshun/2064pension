@@ -17,11 +17,12 @@ services:
         max-size: "20M"
         max-file: "10"
     mem_limit: ${DOCKER_WORDPRESS_MEM}
+    restart: unless-stopped
 
   nginx:
     image: nginx:1.13
     ports:
-      - "80:80"
+      - "8080:80"
     links:
       - wordpress
     volumes:
@@ -34,6 +35,7 @@ services:
         max-size: "20M"
         max-file: "10"
     mem_limit: ${DOCKER_NGINX_MEM}
+    restart: unless-stopped
 
   db:
     image: mysql:5.7
@@ -47,3 +49,4 @@ services:
         max-size: "20M"
         max-file: "10"
     mem_limit: ${DOCKER_DB_MEM}
+    restart: unless-stopped
